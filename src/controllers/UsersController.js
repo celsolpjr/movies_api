@@ -65,9 +65,9 @@ class UsersController {
             user.password = await hash(password, 8);
         }
 
-        await db.run(
+        db.run(
             "UPDATE users SET name = ?, email = ?, password = ?, updated_at = DATETIME('now') WHERE id = ?",
-            [user.name, user.email, user,password, id]
+            [user.name, user.email, user.password, id]
         )
 
         return response.status(200).json();
