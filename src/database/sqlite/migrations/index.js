@@ -1,12 +1,22 @@
 const sqlConnection = require("../../sqlite");
+const createMoviesNotes = require("./createMoviesNotes");
 const createUsers = require("./createUsers");
 
 async function migrationsRun() {
-    const schemas = [createUsers].join("");
+    const schemas = [createUsers, createMoviesNotes];
 
-    sqlConnection()
-    .then((db) => db.exec(schemas))
-    .catch((error) => console.error(error));
+    try {
+        const db = await sqlConnection();
+
+        for (const schema of schemas) {
+            await db.exec(schema);
+        }
+
+        console.log("Migration Completed succesfully");
+
+    } catch (error) {
+        console.error("Migration failed", error);
+    }
 }
 
 module.exports = migrationsRun;
